@@ -17,14 +17,16 @@ struct ProductArray: Codable {
 struct Product: Codable, Identifiable {
     let id: Int
     let title, description: String
-    let price, discountPercentage, rating: Double
+    let price: Double // Double not Int
+    let discountPercentage, rating: Double
     let stock: Int
-    let tags: [String]
-    let brand: String?
-    let sku: String
-    let weight: Int
-    let warrantyInformation, shippingInformation: String
-    let minimumOrderQuantity: Int
-    let images: [String]
+    let brand: String? // <- Optional
+    let category: String
     let thumbnail: String
+    let images: [String]
+    
+    var firstImage: String {
+        images.first ?? Constants.randomImage
+    }
 }
+

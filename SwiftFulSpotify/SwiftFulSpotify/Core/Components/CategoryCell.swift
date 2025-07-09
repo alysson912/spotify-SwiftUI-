@@ -20,10 +20,17 @@ struct CategoryCell: View {
             .padding(.horizontal, 10)
             .frame(minWidth: 35)
             // caso selecionado cor 1, caso o contrario cor 2
-            .background(isSelected ? .spotifyGreen : .spotifyDarkGray)
-            .foregroundStyle(isSelected ? .spotifyBlack : .spotifyWhite)
+            .themeColors(isSelected: isSelected)
             //.cornerRadius(16) //Will be deprecated
             .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+extension View {
+    func themeColors( isSelected: Bool) -> some View{
+        self
+            .background(isSelected ? .spotifyGreen : .spotifyDarkGray)
+            .foregroundStyle(isSelected ? .spotifyBlack : .spotifyWhite)
     }
 }
 
