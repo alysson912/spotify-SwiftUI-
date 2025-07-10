@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RecentsCell: View {
     
+    
     var imageName: String = Constants.randomImage
     var title: String = "Some Title"
     

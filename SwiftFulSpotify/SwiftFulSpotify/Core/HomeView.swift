@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftfulUI
+import SwiftfulUI // SDK SwiftFulThinking
 
 struct HomeView: View {
     
@@ -20,17 +20,10 @@ struct HomeView: View {
             ScrollView(.vertical) {
                 LazyVStack(spacing: 1, pinnedViews: [.sectionHeaders], content: {
                     Section {
-                        
                         VStack {
-                            NonLazyVGrid(columns: 2, alignment: .center, spacing: 10, items: products) { product in
-                                if let product {
-                                    RecentsCell(
-                                        imageName: product.firstImage,
-                                        title: product.title
-                                    )
-                                }
-                            }
+                            recentsSection
                         }
+                        .padding(.horizontal, 16)
                         
                         
                         ForEach(0..<20) { _ in
@@ -60,7 +53,7 @@ struct HomeView: View {
     private func getData() async {
         do {
             currentUser = try await DatabaseHelper().getUsers().first
-            products = try await DatabaseHelper().getProducts()
+            products = try await  Array(DatabaseHelper().getProducts().prefix(8))// limitando para 8 itens
         } catch {
             
         }
@@ -102,6 +95,19 @@ struct HomeView: View {
         .padding(.leading, 8)
         .background(.spotifyBlack)
     }
+  //MARK: COMPONENT GRID DO SDK 
+    private var recentsSection: some View {
+        
+        NonLazyVGrid(columns: 2, alignment: .center, spacing: 10, items: products) { product in
+            if let product {
+                RecentsCell(
+                    imageName: product.firstImage,
+                    title: product.title
+                )
+            }
+        }
+    }
+
 }
 
 #Preview {
