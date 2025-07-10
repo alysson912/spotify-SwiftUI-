@@ -20,8 +20,13 @@ struct HomeView: View {
             ScrollView(.vertical) {
                 LazyVStack(spacing: 1, pinnedViews: [.sectionHeaders], content: {
                     Section {
-                        VStack {
+                        VStack (spacing: 16){
                             recentsSection
+                            
+                            if let product = products.first {
+                          newReleasesSection(product: product)
+                                
+                            }
                         }
                         .padding(.horizontal, 16)
                         
@@ -81,9 +86,7 @@ struct HomeView: View {
                     //MARK: enum com os Itens
                     ForEach(Category.allCases, id: \.self) { category in
                         CategoryCell(title: category.rawValue.capitalized, isSelected: category == selectedCategory)
-                            .onTapGesture {
-                                selectedCategory = category
-                            }
+//                        
                     }
                 }
                 
@@ -95,7 +98,7 @@ struct HomeView: View {
         .padding(.leading, 8)
         .background(.spotifyBlack)
     }
-  //MARK: COMPONENT GRID DO SDK 
+  //MARK: COMPONENT GRID DO SDK
     private var recentsSection: some View {
         
         NonLazyVGrid(columns: 2, alignment: .center, spacing: 10, items: products) { product in
@@ -108,6 +111,24 @@ struct HomeView: View {
         }
     }
 
+    private func newReleasesSection(product: Product) -> some View {
+        NewReleaseCell(
+            
+            imageName: product.firstImage,
+            headline: product.brand,
+            subHeadline: product.category,
+            title: product.title,
+            subtitle: product.description,
+            
+            onAddToPlayListPressed: {
+                //MARK: IMPREMENTAR ACTION BUTTON
+            },
+               
+            onPlayPressed: {
+                //MARK: IMPREMENTAR ACTION BUTTON
+            }
+        )
+    }
 }
 
 #Preview {
