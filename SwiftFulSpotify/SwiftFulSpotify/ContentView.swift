@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var products: [Product] = []
     
     var body: some View {
-        ScrollView {
+        ScrollView (showsIndicators: false){
             VStack {
                 ForEach(products) { product in
                     Text(product.title)
