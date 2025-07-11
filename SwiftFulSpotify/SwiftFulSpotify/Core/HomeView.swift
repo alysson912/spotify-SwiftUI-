@@ -27,22 +27,22 @@ struct HomeView: View {
                                 .padding(.horizontal, 16)
                             
                             if let product = products.first {
-                          newReleasesSection(product: product)
+                                newReleasesSection(product: product)
                                 
                             }
                             listRows
-                          
+                            
                         }
                         .padding(.horizontal, 16)
                         
-                   
+                        
                         
                     } header: {
                         header
                     }
                 })
                 .padding(.top, 8)
-            //   .scrollIndicators(.hidden) //ios16+
+                //   .scrollIndicators(.hidden) //ios16+
             }
             .clipped()
         }
@@ -50,7 +50,7 @@ struct HomeView: View {
             await getData()
         }
         .navigationBarHidden(true) // Oculta a barra
-       // .toolbar(.hidden, for: .navigationBar) //iOS 16+
+        // .toolbar(.hidden, for: .navigationBar) //iOS 16+
     }
     
     
@@ -63,7 +63,7 @@ struct HomeView: View {
             var rows: [ProductRow] = []
             let allBrands = Set(products.map({$0.brand})) // set evita duplicar valores
             for brand in allBrands {
-             //   let products = self.products.filter({$0.brand == brand})
+                //   let products = self.products.filter({$0.brand == brand})
                 rows.append(ProductRow(title: brand ?? "", products: products))
             }
             productsRows = rows
@@ -94,7 +94,10 @@ struct HomeView: View {
                     //MARK: enum com os Itens
                     ForEach(Category.allCases, id: \.self) { category in
                         CategoryCell(title: category.rawValue.capitalized, isSelected: category == selectedCategory)
-//                        
+                        //
+                            .onTapGesture {
+                                selectedCategory = category
+                            }
                     }
                 }
                 
@@ -104,9 +107,10 @@ struct HomeView: View {
         }
         .padding(.vertical, 24)
         .padding(.leading, 8)
-        .background(.spotifyBlack)
+        .frame(maxWidth: .infinity)
+        .background(Color.spotifyBlack)
     }
-  //MARK: COMPONENT GRID DO SDK
+    //MARK: COMPONENT GRID DO SDK
     private var recentsSection: some View {
         
         NonLazyVGrid(columns: 2, alignment: .center, spacing: 10, items: products) { product in
@@ -122,7 +126,7 @@ struct HomeView: View {
             }
         }
     }
-
+    
     private func newReleasesSection(product: Product) -> some View {
         NewReleaseCell(
             
@@ -135,7 +139,7 @@ struct HomeView: View {
             onAddToPlayListPressed: {
                 //MARK: IMPREMENTAR ACTION BUTTON
             },
-               
+            
             onPlayPressed: {
                 //MARK: IMPREMENTAR ACTION BUTTON
             }
@@ -150,9 +154,9 @@ struct HomeView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(.spotifyWhite)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                  //  .background(Color.blue)
+                //  .background(Color.blue)
                     .padding(.horizontal, 16)
-                 
+                
                 ScrollView(.horizontal) {
                     HStack( alignment: .top, spacing: 16) {
                         ForEach(row.products) { product in
@@ -166,12 +170,12 @@ struct HomeView: View {
                             }
                         }
                     }
-                  //  .background(Color.blue)
+                    //  .background(Color.blue)
                     .padding(.horizontal, 16)
                 }
                 //.scrollIndicators
                 
-               // .background(Color.red)
+                // .background(Color.red)
                 
             }
         }

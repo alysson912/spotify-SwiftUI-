@@ -27,7 +27,7 @@ struct CategoryCell: View {
 }
 
 extension View {
-    func themeColors( isSelected: Bool) -> some View{
+    func themeColors(isSelected: Bool) -> some View{
         self
             .background(isSelected ? .spotifyGreen : .spotifyDarkGray)
             .foregroundStyle(isSelected ? .spotifyBlack : .spotifyWhite)
@@ -39,7 +39,7 @@ extension View {
         Color.black.ignoresSafeArea(edges: .all)
         VStack(spacing: 40) {
             CategoryCell(title: "Title goes here", isSelected: false)
-            CategoryCell(title: "all", isSelected: false)
+            CategoryCell(title: "all", isSelected: true)
             CategoryCell(title: "music", isSelected: false)
             CategoryCell(title: "podcasts", isSelected: true)
         }
