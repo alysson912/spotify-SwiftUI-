@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B2CA8972E29A0AB00589B74 /* SwiftfulRouting in Frameworks */ = {isa = PBXBuildFile; productRef = 4B2CA8962E29A0AB00589B74 /* SwiftfulRouting */; };
 		4B32F1E72E0C9D1B004A8CFF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4B32F1E62E0C9D1B004A8CFF /* SDWebImageSwiftUI */; };
 		4BBC6C932E1F218700F6E9F7 /* SwiftfulUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4BBC6C922E1F218700F6E9F7 /* SwiftfulUI */; };
 /* End PBXBuildFile section */
@@ -29,6 +30,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BBC6C932E1F218700F6E9F7 /* SwiftfulUI in Frameworks */,
+				4B2CA8972E29A0AB00589B74 /* SwiftfulRouting in Frameworks */,
 				4B32F1E72E0C9D1B004A8CFF /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,6 +76,7 @@
 			packageProductDependencies = (
 				4B32F1E62E0C9D1B004A8CFF /* SDWebImageSwiftUI */,
 				4BBC6C922E1F218700F6E9F7 /* SwiftfulUI */,
+				4B2CA8962E29A0AB00589B74 /* SwiftfulRouting */,
 			);
 			productName = SwiftFulSpotify;
 			productReference = 4B32F1D72E0C9A09004A8CFF /* SwiftFulSpotify.app */;
@@ -106,6 +109,7 @@
 			packageReferences = (
 				4B32F1E52E0C9D1B004A8CFF /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				4BBC6C912E1F218700F6E9F7 /* XCRemoteSwiftPackageReference "SwiftfulUI" */,
+				4B2CA8952E29A0AB00589B74 /* XCRemoteSwiftPackageReference "SwiftfulRouting" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4B32F1D82E0C9A09004A8CFF /* Products */;
@@ -274,7 +278,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -303,7 +307,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -341,6 +345,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4B2CA8952E29A0AB00589B74 /* XCRemoteSwiftPackageReference "SwiftfulRouting" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulRouting.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.1.3;
+			};
+		};
 		4B32F1E52E0C9D1B004A8CFF /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -360,6 +372,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4B2CA8962E29A0AB00589B74 /* SwiftfulRouting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4B2CA8952E29A0AB00589B74 /* XCRemoteSwiftPackageReference "SwiftfulRouting" */;
+			productName = SwiftfulRouting;
+		};
 		4B32F1E62E0C9D1B004A8CFF /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4B32F1E52E0C9D1B004A8CFF /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;

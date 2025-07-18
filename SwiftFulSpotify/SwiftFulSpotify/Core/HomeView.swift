@@ -7,13 +7,84 @@
 
 import SwiftUI
 import SwiftfulUI // SDK SwiftFulThinking
+import SwiftfulRouting
+
+@Observable // iOS 17+
+final class HomeViewModel {
+    
+    let router: AnyRouter
+    
+     var currentUser: User? = nil
+     var selectedCategory: Category? = nil
+     var products: [Product] = []
+     var productsRows: [ProductRow] = []
+    
+    init(router: AnyRouter) {
+        self.router = router
+        self.currentUser = currentUser
+        self.selectedCategory = selectedCategory
+        self.products = products
+        self.productsRows = productsRows
+    }
+    
+    //MARK: FUNCS
+     func getData() async {
+        
+        guard products.isEmpty else { return }
+        
+        do {
+            currentUser = try await DatabaseHelper().getUsers().first
+            products = try await  Array(DatabaseHelper().getProducts().prefix(8))// limitando para 8 itens
+            
+            var rows: [ProductRow] = []
+            let allBrands = Set(products.map({$0.brand})) // set evita duplicar valores
+            for brand in allBrands {
+                //   let products = self.products.filter({$0.brand == brand})
+                rows.append(ProductRow(title: brand ?? "", products: products))
+            }
+            productsRows = rows
+        } catch {
+            
+        }
+    }
+    
+    @MainActor  func goToPlayListView(product: Product) {
+        guard let currentUser else { return }
+        
+        router.showScreen(.push) {_ in
+            PlaylistView(product: product, user: currentUser)
+        }
+    }
+    
+    //MARK: COMPONENT GRID DO SDK
+     var recentsSection: some View {
+        
+        NonLazyVGrid(columns: 2, alignment: .center, spacing: 10, items: products) { product in
+            if let product {
+                RecentsCell(
+                    imageName: product.firstImage,
+                    title: product.title
+                )
+                //MARK: SDK SWIFTFULTHINKING
+                .asButton (.press){
+                    self.goToPlayListView(product: product)
+                }
+            }
+        }
+    }
+    
+}
 
 struct HomeView: View {
     
-    @State private var currentUser: User? = nil
-    @State private var selectedCategory: Category? = nil
-    @State private var products: [Product] = []
-    @State private var productsRows: [ProductRow] = []
+    @State var viewModel: HomeViewModel
+    
+    @Environment(\.router) var router
+    
+//    @State private var currentUser: User? = nil
+//    @State private var selectedCategory: Category? = nil
+//    @State private var products: [Product] = []
+//    @State private var productsRows: [ProductRow] = []
     
     var body: some View {
         ZStack {
@@ -23,10 +94,10 @@ struct HomeView: View {
                 LazyVStack(spacing: 1, pinnedViews: [.sectionHeaders], content: {
                     Section {
                         VStack (spacing: 16){
-                            recentsSection
+                            viewModel.recentsSection
                                 .padding(.horizontal, 16)
                             
-                            if let product = products.first {
+                            if let product = viewModel.products.first {
                                 newReleasesSection(product: product)
                                 
                             }
@@ -47,43 +118,27 @@ struct HomeView: View {
             .clipped()
         }
         .task {
-            await getData()
+            await viewModel.getData()
         }
         .navigationBarHidden(true) // Oculta a barra
         // .toolbar(.hidden, for: .navigationBar) //iOS 16+
     }
     
     
-    //MARK: FUNCS
-    private func getData() async {
-        do {
-            currentUser = try await DatabaseHelper().getUsers().first
-            products = try await  Array(DatabaseHelper().getProducts().prefix(8))// limitando para 8 itens
-            
-            var rows: [ProductRow] = []
-            let allBrands = Set(products.map({$0.brand})) // set evita duplicar valores
-            for brand in allBrands {
-                //   let products = self.products.filter({$0.brand == brand})
-                rows.append(ProductRow(title: brand ?? "", products: products))
-            }
-            productsRows = rows
-        } catch {
-            
-        }
-    }
+
     
     
     //MARK: UI COMPONENTS
     private var header : some View {
         HStack (spacing: 0){
             ZStack {
-                if let currentUser = currentUser {
+                if let currentUser = viewModel.currentUser {
                     ImageLoaderView()
                     
                         .background(.spotifyWhite)
                         .clipShape(Circle())
                         .onTapGesture {
-                            
+                            router.dismissScreen()
                         }
                 }
             }
@@ -93,10 +148,10 @@ struct HomeView: View {
                 HStack (spacing: 8.0) {
                     //MARK: enum com os Itens
                     ForEach(Category.allCases, id: \.self) { category in
-                        CategoryCell(title: category.rawValue.capitalized, isSelected: category == selectedCategory)
+                        CategoryCell(title: category.rawValue.capitalized, isSelected: category == viewModel.selectedCategory)
                         //
                             .onTapGesture {
-                                selectedCategory = category
+                                viewModel.selectedCategory = category
                             }
                     }
                 }
@@ -104,28 +159,15 @@ struct HomeView: View {
                 .padding(.horizontal, 16)
             }
             //   .scrollIndicators(.hidden) //ios16+
+            .toolbar(.hidden, for: .navigationBar) // iOS 16+
         }
         .padding(.vertical, 24)
         .padding(.leading, 8)
         .frame(maxWidth: .infinity)
         .background(Color.spotifyBlack)
     }
-    //MARK: COMPONENT GRID DO SDK
-    private var recentsSection: some View {
-        
-        NonLazyVGrid(columns: 2, alignment: .center, spacing: 10, items: products) { product in
-            if let product {
-                RecentsCell(
-                    imageName: product.firstImage,
-                    title: product.title
-                )
-                //MARK: SDK SWIFTFULTHINKING
-                .asButton (.press){
-                    
-                }
-            }
-        }
-    }
+
+
     
     private func newReleasesSection(product: Product) -> some View {
         NewReleaseCell(
@@ -138,16 +180,18 @@ struct HomeView: View {
             
             onAddToPlayListPressed: {
                 //MARK: IMPREMENTAR ACTION BUTTON
+                
             },
             
             onPlayPressed: {
                 //MARK: IMPREMENTAR ACTION BUTTON
+                viewModel.goToPlayListView(product: product)
             }
         )
     }
     
     private var listRows: some View {
-        ForEach(productsRows) { row in
+        ForEach(viewModel.productsRows) { row in
             VStack (spacing: 8) {
                 Text(row.title)
                     .font(.title)
@@ -166,7 +210,7 @@ struct HomeView: View {
                                 title: product.title
                             )
                             .asButton (.press){
-                                
+                                viewModel.goToPlayListView(product: product)
                             }
                         }
                     }
@@ -183,5 +227,7 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    RouterView {router in
+        HomeView(viewModel: HomeViewModel(router: router))
+    }
 }
